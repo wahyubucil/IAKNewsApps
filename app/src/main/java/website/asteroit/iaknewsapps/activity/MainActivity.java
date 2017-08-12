@@ -4,6 +4,8 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,13 @@ import website.asteroit.iaknewsapps.rest.ApiService;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final String TAG = MainActivity.class.getSimpleName();
     @BindView(R.id.rv_news_list) RecyclerView mRvNewsList;
 
     private LinearLayoutManager mLayoutManager;
+    private NewsListAdapter mNewsListAdapterDummy;
     private NewsListAdapter mNewsListAdapter;
+    private List<ArticlesItem> mListArticle = new ArrayList<>();
 
     private static final String NEWS_SOURCE = "techcrunch";
 
@@ -39,8 +44,13 @@ public class MainActivity extends AppCompatActivity {
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mRvNewsList.setLayoutManager(mLayoutManager);
 
-        mNewsListAdapter = new NewsListAdapter(getDummyData());
+        mNewsListAdapterDummy = new NewsListAdapter();
+        mNewsListAdapter = new NewsListAdapter();
+
+//        mRvNewsList.setAdapter(mNewsListAdapterDummy);
         mRvNewsList.setAdapter(mNewsListAdapter);
+
+        getData();
     }
 
     private List<ArticlesItem> getDummyData() {
@@ -68,12 +78,17 @@ public class MainActivity extends AppCompatActivity {
         newsApiResponseCall.enqueue(new Callback<NewsApiResponse>() {
             @Override
             public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
-
+                NewsApiResponse apiResponse = response.body();
+                if (apiResponse != null) {
+                    mListArticle = apiResponse.getArticles();
+                    mNewsListAdapter.setNewsListData(mListArticle);
+                }
             }
 
             @Override
             public void onFailure(Call<NewsApiResponse> call, Throwable t) {
-
+                Toast.makeText(MainActivity.this, "Error retrieving data from internet : " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "OnFailure : " + t.getMessage());
             }
         });
     }

@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -22,10 +23,9 @@ import website.asteroit.iaknewsapps.model.ArticlesItem;
 
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsListViewHolder> {
 
-    private List<ArticlesItem> mNewsList;
+    private List<ArticlesItem> mNewsList = new ArrayList<>();
 
-    public NewsListAdapter(List<ArticlesItem> newsList) {
-        this.mNewsList = newsList;
+    public NewsListAdapter() {
     }
 
     @Override
@@ -44,6 +44,12 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
     public int getItemCount() {
         if (mNewsList == null) return 0;
         return mNewsList.size();
+    }
+
+    public void setNewsListData(List<ArticlesItem> newsList) {
+        mNewsList.clear();
+        mNewsList.addAll(newsList);
+        notifyDataSetChanged();
     }
 
     public class NewsListViewHolder extends RecyclerView.ViewHolder {
