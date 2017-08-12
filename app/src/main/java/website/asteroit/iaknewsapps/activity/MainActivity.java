@@ -10,9 +10,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import website.asteroit.iaknewsapps.BuildConfig;
 import website.asteroit.iaknewsapps.R;
 import website.asteroit.iaknewsapps.adapter.NewsListAdapter;
 import website.asteroit.iaknewsapps.model.ArticlesItem;
+import website.asteroit.iaknewsapps.model.NewsApiResponse;
+import website.asteroit.iaknewsapps.rest.ApiClient;
+import website.asteroit.iaknewsapps.rest.ApiService;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +27,8 @@ public class MainActivity extends AppCompatActivity {
 
     private LinearLayoutManager mLayoutManager;
     private NewsListAdapter mNewsListAdapter;
+
+    private static final String NEWS_SOURCE = "techcrunch";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,5 +56,25 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return dummyList;
+    }
+
+    private void getData() {
+        ApiService apiService = ApiClient.getRetrofitClient().create(ApiService.class);
+        Call<NewsApiResponse> newsApiResponseCall = apiService.getArticle(
+                NEWS_SOURCE,
+                BuildConfig.API_KEY
+        );
+
+        newsApiResponseCall.enqueue(new Callback<NewsApiResponse>() {
+            @Override
+            public void onResponse(Call<NewsApiResponse> call, Response<NewsApiResponse> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<NewsApiResponse> call, Throwable t) {
+
+            }
+        });
     }
 }
