@@ -17,6 +17,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import website.asteroit.iaknewsapps.BuildConfig;
 import website.asteroit.iaknewsapps.R;
+import website.asteroit.iaknewsapps.adapter.NewsClickListener;
 import website.asteroit.iaknewsapps.adapter.NewsListAdapter;
 import website.asteroit.iaknewsapps.model.ArticlesItem;
 import website.asteroit.iaknewsapps.model.NewsApiResponse;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String NEWS_SOURCE = "techcrunch";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
@@ -46,6 +47,12 @@ public class MainActivity extends AppCompatActivity {
 
         mNewsListAdapterDummy = new NewsListAdapter();
         mNewsListAdapter = new NewsListAdapter();
+        mNewsListAdapter.setItemClickListener(new NewsClickListener() {
+            @Override
+            public void onItemNewsClickced(ArticlesItem newsItem) {
+                DetailActivity.start(MainActivity.this, newsItem.toJson());
+            }
+        });
 
 //        mRvNewsList.setAdapter(mNewsListAdapterDummy);
         mRvNewsList.setAdapter(mNewsListAdapter);

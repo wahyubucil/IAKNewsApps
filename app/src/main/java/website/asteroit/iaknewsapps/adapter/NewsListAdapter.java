@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import website.asteroit.iaknewsapps.model.ArticlesItem;
 public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsListViewHolder> {
 
     private List<ArticlesItem> mNewsList = new ArrayList<>();
+    private NewsClickListener mNewsClickListener;
 
     public NewsListAdapter() {
     }
@@ -36,8 +38,16 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
 
     @Override
     public void onBindViewHolder(NewsListViewHolder holder, int position) {
-        ArticlesItem currentNews = mNewsList.get(position);
+        final ArticlesItem currentNews = mNewsList.get(position);
         holder.bind(currentNews);
+        holder.mBtnReadMore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mNewsClickListener != null) {
+                    mNewsClickListener.onItemNewsClickced(currentNews);
+                }
+            }
+        });
     }
 
     @Override
@@ -52,11 +62,18 @@ public class NewsListAdapter extends RecyclerView.Adapter<NewsListAdapter.NewsLi
         notifyDataSetChanged();
     }
 
+    public void setItemClickListener(NewsClickListener clickListener) {
+        if (clickListener != null) {
+            this.mNewsClickListener = clickListener;
+        }
+    }
+
     public class NewsListViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.iv_news_list_photo) ImageView mIvNewsListPhoto;
         @BindView(R.id.tv_news_list_title) TextView mTvNewsListTitle;
         @BindView(R.id.tv_news_list_description) TextView mTvNewsListDescription;
+        @BindView(R.id.btn_read_more) Button mBtnReadMore;
 
         public NewsListViewHolder(View itemView) {
             super(itemView);

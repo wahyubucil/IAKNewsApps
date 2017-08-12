@@ -43,7 +43,7 @@
             tools:text="Description"/>
 
         <Button
-            android:id="@+id/btnReadMore"
+            android:id="@+id/btn_read_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/read_more"

@@ -1,5 +1,6 @@
 package website.asteroit.iaknewsapps.model;
 
+import com.google.gson.Gson;
 import com.google.gson.annotations.SerializedName;
 
 public class ArticlesItem{
@@ -93,5 +94,13 @@ public class ArticlesItem{
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String toJson() {
+        return new Gson().toJson(this);
+    }
+
+    public ArticlesItem fromJson(String newsJson) {
+        return new Gson().fromJson(newsJson, ArticlesItem.class);
     }
 }
